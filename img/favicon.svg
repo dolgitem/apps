@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+<title>Четырнадцать</title>
+<desc>Огромное 14 на графите, знак рубля надстрочным — самый читаемый вариант на мелком размере</desc>
+<rect width="1024" height="1024" fill="#17161a"/>
+<g transform="translate(190.0,398.8) scale(0.9428)" fill="#f7f3ea" fill-rule="nonzero"><g transform="translate(0,0)"><path d="M96 0 h110 v342 h-110 V96 L18 132 L0 44 Z"/></g><g transform="translate(258,0)"><path d="M240 0 h96 v342 h-96 Z M0 190 h336 v96 H0 Z M110 0 h96 L96 286 H0 Z"/></g></g><g transform="translate(753.0,183.6) scale(0.4934)" fill="#ffd233" fill-rule="nonzero"><g transform="translate(0,0)"><path d="M48 0 h96 v342 H48 Z M144 0 H204 a100 100 0 0 1 0 200 H144 Z M144 134 H204 a34 34 0 0 0 0 -68 H144 Z M0 232 h210 v72 H0 Z"/></g></g>
+</svg>

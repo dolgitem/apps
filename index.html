@@ -1,0 +1,489 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Артём — мобильные приложения и игры</title>
+<meta name="description" content="Мобильные приложения и игры: Литерио, Баю, Confuel, Qro. Плюс расширение Ozon для браузера. Ссылки на сторы и телеграм-канал.">
+<meta name="color-scheme" content="light dark">
+
+<!-- Иконка вкладки — тот же знак «14 ₽», что стоит аватаркой в телеге и инсте.
+     SVG для браузеров, PNG для айфона («на экран Домой»). -->
+<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+
+<!-- Open Graph: чтобы ссылка в био/мессенджерах выглядела прилично.
+     og:image собирается скриптом из аватарки и иконок приложений — см. README. -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Артём — мобильные приложения и игры">
+<meta property="og:description" content="Литерио, Баю, Ozon, Confuel, Qro. И телеграм-канал про то, как это делается.">
+<meta property="og:url" content="https://dolgitem.github.io/apps/">
+<meta property="og:image" content="https://dolgitem.github.io/apps/img/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+
+<style>
+/* ---------- Токены темы ---------- */
+:root{
+  --bg:#f6f6f4;
+  --card:#ffffff;
+  --text:#16161a;
+  --muted:#6b6b76;
+  --line:#e5e5e0;
+  --btn-bg:#16161a;
+  --btn-text:#ffffff;
+  --btn2-bg:#eeeeea;
+  --btn2-text:#16161a;
+  --tg:#2aabee;
+  --tg-text:#ffffff;
+  --shadow:0 1px 2px rgba(0,0,0,.05), 0 8px 24px rgba(0,0,0,.05);
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0e0e11;
+    --card:#17171c;
+    --text:#f2f2f4;
+    --muted:#9a9aa6;
+    --line:#26262e;
+    --btn-bg:#f2f2f4;
+    --btn-text:#16161a;
+    --btn2-bg:#292932;
+    --btn2-text:#f2f2f4;
+    --tg:#2aabee;
+    --tg-text:#06121a;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
+  }
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;
+  font-size:16px;
+  line-height:1.5;
+  -webkit-text-size-adjust:100%;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:inherit}
+
+.wrap{
+  max-width:560px;
+  margin:0 auto;
+  padding:40px 16px calc(48px + env(safe-area-inset-bottom));
+}
+
+/* ---------- Шапка ---------- */
+.hero{margin-bottom:28px}
+/* Аватарка канала «14 ₽» — та же, что в телеге и инсте. */
+.avatar{
+  width:64px;height:64px;border-radius:20px;
+  display:block;object-fit:cover;
+  background:#17171c;
+  margin-bottom:14px;
+}
+h1{font-size:26px;line-height:1.2;margin:0 0 8px;letter-spacing:-.02em}
+.hero p{margin:0;color:var(--muted);font-size:16px}
+
+/* ---------- Секции ---------- */
+h2{
+  font-size:12px;text-transform:uppercase;letter-spacing:.08em;
+  color:var(--muted);font-weight:600;margin:0 0 12px;
+}
+.apps{display:flex;flex-direction:column;gap:12px;margin-bottom:32px}
+
+/* ---------- Карточка приложения ---------- */
+.app{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:16px;
+  box-shadow:var(--shadow);
+}
+.app-head{display:flex;gap:14px;align-items:flex-start}
+/* Настоящие иконки из сторов. Скруглены как в системе; тонкая рамка нужна
+   иконкам со светлым фоном, иначе они сливаются с карточкой в тёмной теме. */
+.icon{
+  flex:0 0 auto;
+  width:52px;height:52px;border-radius:14px;
+  display:block;object-fit:cover;
+  border:1px solid var(--line);
+  background:#fff;
+  user-select:none;-webkit-user-drag:none;
+}
+
+.app-title{font-size:17px;font-weight:650;margin:0 0 3px;letter-spacing:-.01em}
+.app-desc{margin:0;color:var(--muted);font-size:14px}
+/* Дата первой публикации — по первому стору, в который приложение попало. */
+.app-date{margin:6px 0 0;color:var(--muted);opacity:.72;font-size:12.5px;
+  font-variant-numeric:tabular-nums}
+
+/* Полоса скриншотов. Уезжает вбок внутри своей области — страница по горизонтали
+   не скроллится. -webkit-overflow-scrolling для инерции на айфоне. */
+.shots{display:flex;gap:10px;margin-top:14px;overflow-x:auto;-webkit-overflow-scrolling:touch;
+  scroll-snap-type:x mandatory;padding-bottom:6px;scrollbar-width:thin}
+.shots img{flex:0 0 auto;height:266px;width:auto;border-radius:12px;display:block;
+  border:1px solid var(--line);scroll-snap-align:start;background:#fff;
+  cursor:zoom-in}
+
+/* ---------- Просмотр скриншотов на весь экран ----------
+   Тап по картинке открывает галерею того приложения, в карточке которого
+   она лежит. Листается стрелками, клавишами ←/→ и свайпом.
+   Закрывается тапом по фону, кнопкой ✕ или Esc. Без библиотек. */
+.lightbox{
+  border:0;padding:0;max-width:100%;max-height:100%;width:100%;height:100%;
+  background:transparent;overflow:hidden;
+}
+.lightbox::backdrop{background:rgba(12,14,18,.94)}
+.lightbox-inner{
+  width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;
+  padding:56px 16px;box-sizing:border-box;cursor:zoom-out;
+  touch-action:pan-y;
+}
+.lightbox img{
+  max-width:100%;max-height:100%;
+  width:auto;height:auto;
+  border-radius:14px;display:block;background:#fff;
+  box-shadow:0 24px 60px rgba(0,0,0,.5);
+  cursor:default;
+  user-select:none;-webkit-user-drag:none;
+}
+.lightbox-close,.lightbox-nav{
+  position:fixed;
+  border:0;cursor:pointer;padding:0;
+  background:rgba(255,255,255,.14);color:#fff;
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+}
+.lightbox-close:hover,.lightbox-nav:hover{background:rgba(255,255,255,.26)}
+.lightbox-close{top:12px;right:12px;width:40px;height:40px;font-size:20px}
+.lightbox-nav{
+  top:50%;transform:translateY(-50%);
+  width:48px;height:48px;font-size:24px;line-height:1;
+}
+.lightbox-nav[data-dir="-1"]{left:12px}
+.lightbox-nav[data-dir="1"]{right:12px}
+/* У приложения с одним скриншотом листать нечего — стрелки и счётчик прячем. */
+.lightbox[data-single] .lightbox-nav,
+.lightbox[data-single] .lightbox-count{display:none}
+.lightbox-count{
+  position:fixed;left:0;right:0;bottom:18px;
+  text-align:center;color:rgba(255,255,255,.75);
+  font-size:13px;font-variant-numeric:tabular-nums;
+  pointer-events:none;
+}
+
+@media (max-width:520px){
+  /* На телефоне стрелки уводим вниз, чтобы не лежали поверх картинки. */
+  .lightbox-inner{padding:56px 10px 96px}
+  .lightbox-nav{top:auto;bottom:14px;transform:none;width:44px;height:44px}
+  .lightbox-nav[data-dir="-1"]{left:calc(50% - 62px)}
+  .lightbox-nav[data-dir="1"]{right:calc(50% - 62px)}
+  .lightbox-count{bottom:72px}
+}
+
+.links{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  flex:1 1 auto;min-width:140px;
+  padding:11px 14px;
+  border-radius:11px;
+  font-size:14px;font-weight:600;
+  text-decoration:none;
+  border:1px solid transparent;
+}
+.btn-primary{background:var(--btn-bg);color:var(--btn-text)}
+/* Вторичная кнопка: тише основной, но с собственным фоном — иначе на карточке
+   её просто не видно. */
+.btn-ghost{background:var(--btn2-bg);color:var(--btn2-text);border-color:transparent}
+
+/* ---------- Телеграм-блок ---------- */
+.tg-block{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:20px;
+  box-shadow:var(--shadow);
+  margin-bottom:28px;
+}
+.tg-block h3{margin:0 0 6px;font-size:19px;letter-spacing:-.01em}
+.tg-block p{margin:0 0 16px;color:var(--muted);font-size:14px}
+.btn-tg{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;
+  background:var(--tg);color:var(--tg-text);
+  padding:14px 16px;border-radius:12px;
+  font-size:16px;font-weight:700;text-decoration:none;
+}
+.btn-tg svg{width:20px;height:20px;flex:0 0 auto;fill:currentColor}
+
+footer{color:var(--muted);font-size:12px;text-align:center}
+
+/* Чуть просторнее на широких экранах */
+@media (min-width:560px){
+  .wrap{padding-top:56px}
+  h1{font-size:30px}
+}
+/* Строка-ссылка в телегу сразу под шапкой: крупный блок с каналом живёт внизу
+   страницы, а до него доскроллит не каждый. */
+.hero-tg{display:inline-flex;align-items:center;gap:6px;margin-top:14px;
+  font-size:14px;font-weight:600;color:var(--tg);text-decoration:none}
+.hero-tg:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <img class="avatar" src="img/avatar.png" width="64" height="64" alt="Аватарка канала: 14 ₽">
+    <h1>Артём</h1>
+    <p>Делаю мобильные приложения и игры в одиночку.</p>
+    <div><a class="hero-tg" href="https://t.me/dolgitemdev" target="_blank" rel="noopener">Пишу, как это делается, в телеге →</a></div>
+  </header>
+
+  <!--
+    ============================ О UTM-МЕТКАХ ============================
+    Задача: понимать, что установка пришла именно с этой страницы (ссылка в био).
+
+    RuStore — обычные query-параметры прямо в ссылке каталога:
+        ?utm_source=landing&utm_medium=bio&utm_campaign=<app>
+      RuStore читает их как отдельные параметры страницы приложения.
+
+    Google Play — так НЕ работает. Play-ссылка уже несёт свой параметр ?id=<package>,
+    а метки кампании Play принимает ТОЛЬКО в одном параметре `referrer`,
+    в котором utm-строка лежит целиком и URL-энкодится (& -> %26, = -> %3D):
+        ...?id=com.dolgitem.bayou&referrer=utm_source%3Dlanding%26utm_medium%3Dbio%26utm_campaign%3Dbayou
+      Именно это значение потом доезжает до приложения через Install Referrer API
+      и показывается в Play Console. Просто дописанные &utm_source=... Play игнорирует.
+
+    ОТКУДА ПРИШЁЛ ЧЕЛОВЕК. В ссылку в био добавляется ?src=<площадка>, например
+        https://dolgitem.github.io/apps/?src=instagram
+      Скрипт в конце страницы подставляет это в метки всех кнопок:
+      utm_source=instagram, utm_medium=landing. Без ?src= остаётся значение
+      по умолчанию из разметки (utm_source=landing, utm_medium=bio).
+      Список допустимых площадок — в скрипте; чужое значение игнорируется,
+      чтобы в статистику стора не попадал мусор из подделанных ссылок.
+    =====================================================================
+  -->
+
+  <h2>Приложения</h2>
+  <div class="apps">
+
+    <article class="app">
+      <div class="app-head">
+        <img class="icon" src="img/icon-literio.png" width="52" height="52" loading="lazy" alt="Иконка Литерио">
+        <div>
+          <h3 class="app-title">Литерио</h3>
+          <p class="app-desc">Игра про буквы: по конвейеру едут плашки, тап опускает пресс и хватает букву, из букв собирается слово. Три ошибки — конец забега.</p>
+          <p class="app-date">В сторах с 21.08.2026</p>
+        </div>
+      </div>
+      <div class="shots">
+        <img src="img/literio-gameplay.png" width="540" height="960" loading="lazy" alt="Литерио: буква под прессом на конвейере">
+        <img src="img/literio-combo.png" width="540" height="960" loading="lazy" alt="Литерио: комбо и множитель счёта">
+        <img src="img/literio-achievements.png" width="540" height="960" loading="lazy" alt="Литерио: достижения">
+        <img src="img/literio-shop.png" width="540" height="960" loading="lazy" alt="Литерио: магазин подсказок">
+      </div>
+      <div class="links">
+        <a class="btn btn-primary" href="https://www.rustore.ru/catalog/app/com.dolgitem.literio?utm_source=landing&amp;utm_medium=bio&amp;utm_campaign=literio" target="_blank" rel="noopener">RuStore</a>
+      </div>
+    </article>
+
+    <article class="app">
+      <div class="app-head">
+        <img class="icon" src="img/icon-bayou.png" width="52" height="52" loading="lazy" alt="Иконка Баю">
+        <div>
+          <h3 class="app-title">Баю</h3>
+          <p class="app-desc">Таймер сна и бодрствования малыша, учёт режима дня.</p>
+          <p class="app-date">В сторах с 13.02.2026</p>
+        </div>
+      </div>
+      <div class="shots">
+        <img src="img/bayou-timer.png" width="540" height="960" loading="lazy" alt="Баю: таймеры сна и бодрствования">
+        <img src="img/bayou-history.png" width="540" height="960" loading="lazy" alt="Баю: история за сутки">
+        <img src="img/bayou-stats.png" width="540" height="960" loading="lazy" alt="Баю: статистика и лента дня">
+        <img src="img/bayou-edit.png" width="540" height="960" loading="lazy" alt="Баю: редактирование записи">
+      </div>
+      <div class="links">
+        <!-- Google Play идёт первым и основной кнопкой: он приоритетнее RuStore.
+             Метки здесь живут только внутри referrer, значение URL-энкодится целиком. -->
+        <a class="btn btn-primary" href="https://play.google.com/store/apps/details?id=com.dolgitem.bayou&amp;referrer=utm_source%3Dlanding%26utm_medium%3Dbio%26utm_campaign%3Dbayou" target="_blank" rel="noopener">Google Play</a>
+        <a class="btn btn-ghost" href="https://www.rustore.ru/catalog/app/com.dolgitem.bayou?utm_source=landing&amp;utm_medium=bio&amp;utm_campaign=bayou" target="_blank" rel="noopener">RuStore</a>
+      </div>
+    </article>
+
+    <article class="app">
+      <div class="app-head">
+        <img class="icon" src="img/icon-ozon.png" width="52" height="52" loading="lazy" alt="Иконка расширения Ozon">
+        <div>
+          <h3 class="app-title">Ozon: статистика трат</h3>
+          <p class="app-desc">Расширение для браузера: собирает заказы из архива Ozon и показывает траты по годам и месяцам. Данные никуда не уходят — считаются на вашей же машине.</p>
+          <p class="app-date">В сторе с 24.07.2026</p>
+        </div>
+      </div>
+      <div class="shots">
+        <img src="img/ozon-stats.png" width="754" height="816" loading="lazy" alt="Ozon: статистика трат — итоги: заказов, потрачено, средний чек">
+        <img src="img/ozon-orders.png" width="754" height="1066" loading="lazy" alt="Ozon: статистика трат — список заказов с суммами">
+        <img src="img/ozon-chart.png" width="754" height="836" loading="lazy" alt="Ozon: статистика трат — график трат по месяцам">
+      </div>
+      <div class="links">
+        <a class="btn btn-primary" href="https://chromewebstore.google.com/detail/ozon-%D1%81%D1%82%D0%B0%D1%82%D0%B8%D1%81%D1%82%D0%B8%D0%BA%D0%B0-%D1%82%D1%80%D0%B0%D1%82/ofgdpjgolfjekcjgijhpoeepapmpjgoj" target="_blank" rel="noopener">Chrome Web Store</a>
+      </div>
+    </article>
+
+    <article class="app">
+      <div class="app-head">
+        <img class="icon" src="img/icon-confuel.png" width="52" height="52" loading="lazy" alt="Иконка Confuel">
+        <div>
+          <h3 class="app-title">Confuel</h3>
+          <p class="app-desc">Конвертер расхода топлива: л/100&nbsp;км ↔ mpg ↔ км/л.</p>
+          <p class="app-date">В сторах с 11.03.2026</p>
+        </div>
+      </div>
+      <div class="shots">
+        <img src="img/confuel-convert.png" width="540" height="960" loading="lazy" alt="Confuel: пересчёт расхода топлива">
+        <img src="img/confuel-units.png" width="540" height="960" loading="lazy" alt="Confuel: выбор единиц измерения">
+      </div>
+      <div class="links">
+        <a class="btn btn-primary" href="https://www.rustore.ru/catalog/app/com.dolgitem.confuel?utm_source=landing&amp;utm_medium=bio&amp;utm_campaign=confuel" target="_blank" rel="noopener">RuStore</a>
+      </div>
+    </article>
+
+    <article class="app">
+      <div class="app-head">
+        <img class="icon" src="img/icon-qro.png" width="52" height="52" loading="lazy" alt="Иконка Qro">
+        <div>
+          <h3 class="app-title">Qro</h3>
+          <p class="app-desc">Генератор QR-кодов, экспорт в PNG и SVG.</p>
+          <p class="app-date">В сторах с 20.03.2026</p>
+        </div>
+      </div>
+      <div class="shots">
+        <img src="img/qro-result.png" width="540" height="960" loading="lazy" alt="Qro: сгенерированный QR-код и экспорт">
+      </div>
+      <div class="links">
+        <a class="btn btn-primary" href="https://www.rustore.ru/catalog/app/com.dolgitem.qrcodeapp?utm_source=landing&amp;utm_medium=bio&amp;utm_campaign=qro" target="_blank" rel="noopener">RuStore</a>
+      </div>
+    </article>
+  </div>
+
+  <section class="tg-block">
+    <h3>Пишу про то, как это делается</h3>
+    <p>Разработка, релизы в сторы, что работает и что нет — в телеграм-канале.</p>
+    <a class="btn-tg" href="https://t.me/dolgitemdev" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.9 4.3 18.6 20c-.2 1.1-.9 1.4-1.8.9l-5-3.7-2.4 2.3c-.3.3-.5.5-1 .5l.4-5.1 9.3-8.4c.4-.4-.1-.6-.6-.2L6.1 13.5l-4.9-1.5c-1.1-.3-1.1-1 .2-1.5l19.2-7.4c.9-.3 1.6.2 1.3 1.2Z"/></svg>
+      Открыть канал
+    </a>
+  </section>
+
+  <footer>© 2026</footer>
+
+</div>
+
+<dialog class="lightbox" id="lightbox" aria-label="Скриншоты приложения">
+  <button class="lightbox-close" type="button" data-close aria-label="Закрыть">✕</button>
+  <button class="lightbox-nav" type="button" data-dir="-1" aria-label="Предыдущий скриншот">‹</button>
+  <button class="lightbox-nav" type="button" data-dir="1" aria-label="Следующий скриншот">›</button>
+  <div class="lightbox-inner" data-close>
+    <img id="lightbox-img" src="" alt="">
+  </div>
+  <div class="lightbox-count" id="lightbox-count" aria-live="polite"></div>
+</dialog>
+
+<script>
+/* Помечаем кнопки сторов площадкой, с которой человек пришёл на страницу.
+   Ссылка в био выглядит как /apps/?src=instagram — см. комментарий про UTM выше. */
+(function () {
+  var ALLOWED = ['instagram', 'threads', 'tiktok', 'youtube', 'vk', 'telegram'];
+
+  var src = new URLSearchParams(location.search).get('src');
+  if (!src || ALLOWED.indexOf(src) === -1) return;   // нет метки или чужая — оставляем как в разметке
+
+  function retag(params) {
+    params.set('utm_source', src);
+    params.set('utm_medium', 'landing');   // площадка привела, лендинг довёл
+  }
+
+  document.querySelectorAll('.links a[href]').forEach(function (a) {
+    var url = new URL(a.href);
+
+    // Google Play держит метки внутри одного параметра referrer
+    var ref = url.searchParams.get('referrer');
+    if (ref !== null) {
+      var inner = new URLSearchParams(ref);
+      retag(inner);
+      url.searchParams.set('referrer', inner.toString());
+    } else if (url.searchParams.has('utm_source')) {
+      retag(url.searchParams);
+    } else {
+      return;   // ссылка без меток (например, Chrome Web Store) — не трогаем
+    }
+
+    a.href = url.toString();
+  });
+})();
+
+/* Галерея скриншотов. Обработчики висят на документе, поэтому новые приложения
+   и новые картинки ничего здесь менять не требуют. */
+(function () {
+  var box   = document.getElementById('lightbox');
+  var img   = document.getElementById('lightbox-img');
+  var count = document.getElementById('lightbox-count');
+  if (!box || typeof box.showModal !== 'function') return; // старый браузер — оставляем как есть
+
+  var group = [];   // скриншоты одного приложения
+  var index = 0;
+
+  function show(i) {
+    index = (i + group.length) % group.length;   // по кругу
+    var shot = group[index];
+    img.src = shot.currentSrc || shot.src;
+    img.alt = shot.alt;
+    count.textContent = (index + 1) + ' / ' + group.length;
+  }
+
+  function open(shot) {
+    group = Array.prototype.slice.call(shot.closest('.shots').querySelectorAll('img'));
+    box.toggleAttribute('data-single', group.length < 2);
+    show(group.indexOf(shot));
+    box.showModal();
+  }
+
+  document.addEventListener('click', function (e) {
+    var shot = e.target.closest('.shots img');
+    if (shot) { open(shot); return; }
+    if (!box.open) return;
+
+    var nav = e.target.closest('.lightbox-nav');
+    if (nav) { show(index + Number(nav.dataset.dir)); return; }
+
+    // тап по фону закрывает, тап по самой картинке — нет
+    if (e.target.closest('[data-close]') && !e.target.closest('.lightbox img')) box.close();
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (!box.open || group.length < 2) return;
+    if (e.key === 'ArrowRight') { show(index + 1); e.preventDefault(); }
+    if (e.key === 'ArrowLeft')  { show(index - 1); e.preventDefault(); }
+  });
+
+  // Свайп на телефоне
+  var startX = null;
+  box.addEventListener('touchstart', function (e) {
+    startX = e.touches.length === 1 ? e.touches[0].clientX : null;
+  }, {passive: true});
+  box.addEventListener('touchend', function (e) {
+    if (startX === null || group.length < 2) return;
+    var dx = e.changedTouches[0].clientX - startX;
+    startX = null;
+    if (Math.abs(dx) > 40) show(index + (dx < 0 ? 1 : -1));
+  });
+
+  box.addEventListener('close', function () { img.src = ''; group = []; });
+})();
+</script>
+</body>
+</html>
